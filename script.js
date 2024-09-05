@@ -130,13 +130,13 @@ createApp({
                     this.heroSprite = this.originalHeroSprite;
                 }, 4000);
                 this.isHero = false;
-                this.villainAction();
+                
+                if (this.villain.life === 0) {
+                    this.isVictory = true;
+                } else {
+                    this.villainAction();
+                }
             } 
-            // else if (this.isHero === false) {
-            //     const damage = (this.villain.attack * 2)
-            //     this.hero.life = Math.max(this.hero.life - damage, 0);
-            //     this.villainAction();
-            // }
         },
         flee(isHero) {
             alert('You have fled the battle!');
