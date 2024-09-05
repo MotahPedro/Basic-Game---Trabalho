@@ -13,26 +13,44 @@
         <h1>Hora do Duelo</h1>
         <div class="character">
 
-            <div class="life-bar">{{hero.life}}</div>
-            <div class="mana-bar">{{hero.mana}}</div>
+            <div class="life-bar">
+                <div class="life" :style="{width: heroLifePercentage + '%'}">{{hero.life}}</div>
+            </div>
+
+            <div class="mana-bar">
+                <div class="mana" :style="{width: heroManaPercentage + '%'}">{{hero.mana}}</div>
+            </div>
+
             <div class="sprite">
-                Sprite do Heroi
+                <img :src="heroSprite" id="heroSprite" alt="Sprite do Heroi">
             </div>
             <h1> Duelist - Anna </h1>
-            <button @click="">Atacar</button>
-            <button @click="">Defender</button>
-            <button @click="">Usar Poção</button>
-            <button @click="">Correr</button>
-            <button @click="">Especial</button>
+            <button @click="attack()">Atacar</button>
+            <button @click="defend()">Defender</button>
+            <button @click="usePotion()">Usar Poção</button>
+            <button @click="flee()">Correr</button>
+            <button @click="special()">Especial</button>
+
         </div>
 
         <div class="character">
-            <div class="life-bar">{{villain.life}}</div>
+
+            <div class="life-bar">
+                <div class="life" :style="{width: villainLifePercentage + '%'}">{{villain.life}}</div>
+            </div>
+
             <div class="sprite">
-                Sprite do Inimigo
+                <img src="Assets/SpearGoblin-sprite.png" id="villainSprite" alt="Sprite do inimigo">
             </div>
             <h1>Goblin</h1>
+
         </div>
+
+        <div class="musica">
+            <button @click="playMusic" class="play">Tocar Música</button>
+            <button @click="pauseMusic" class="pause">Pausar Música</button>
+        </div>
+
 
     </div>
     
@@ -40,3 +58,8 @@
 </html>
 
 <script src="script.js"></script>
+
+<audio id="backgroundMusic" loop>
+    <source src="Assets/Undertale OST 014 - Heartache.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
