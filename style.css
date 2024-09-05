@@ -1,0 +1,78 @@
+html body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #deecf2;
+}
+
+#app {
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+}
+
+.character {
+    margin-bottom: 20px;
+    border: 2px solid black;
+    padding: 10px;
+    border-radius: 5px;
+    background-color: whitesmoke;
+    height: 300px;
+}
+
+.actions {
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+button {
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #1d509f;
+    color: whitesmoke;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+button:hover {
+    background-color: #1a355c;
+}
+
+button:active {
+    transform: translateY(2px);
+    background-color: #1a355c;
+}
+
+.life-bar {
+    width: 100%;
+    height: 30px;
+    background-color: #9ce39e;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.sprite {
+    height: 100px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    background-color: #c1c1c1;
+}
+
+.manas-bar {
+    width: 100%;
+    height: 30px;
+    background-color: #0031b9;
+    border: 1px solid black;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}

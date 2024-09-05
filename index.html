@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prova - Hora do Duelo</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="app">
+        <h1>Hora do Duelo</h1>
+        <div class="character">
+
+            <div class="life-bar">{{hero.life}}</div>
+            <div class="mana-bar">{{hero.mana}}</div>
+            <div class="sprite">
+                Sprite do Heroi
+            </div>
+            <h1> Duelist - Anna </h1>
+            <button @click="">Atacar</button>
+            <button @click="">Defender</button>
+            <button @click="">Usar Poção</button>
+            <button @click="">Correr</button>
+            <button @click="">Especial</button>
+        </div>
+
+        <div class="character">
+            <div class="life-bar">{{villain.life}}</div>
+            <div class="sprite">
+                Sprite do Inimigo
+            </div>
+            <h1>Goblin</h1>
+        </div>
+
+    </div>
+    
+</body>
+</html>
+
+<script src="script.js"></script>
