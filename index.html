@@ -40,7 +40,7 @@
             </div>
 
             <div class="sprite">
-                <img src="Assets/SpearGoblin-sprite.png" id="villainSprite" alt="Sprite do inimigo">
+                <img :src="villainSprite" id="villainSprite" alt="Sprite do inimigo">
             </div>
             <h1>Goblin</h1>
 
@@ -49,6 +49,11 @@
         <div class="musica">
             <button @click="playMusic" class="play">Tocar Música</button>
             <button @click="pauseMusic" class="pause">Pausar Música</button>
+        </div>
+
+        <div v-if="isVictory" class="victory-modal">
+            <h1>Vitória!</h1>
+            <button @click="restartBattle">Reiniciar Combate</button>
         </div>
 
 

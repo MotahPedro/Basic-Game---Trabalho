@@ -3,7 +3,7 @@ const { createApp } = Vue;
 createApp({
     data() {
         return {
-            hero: { life: 100, attack: getRandomAttack(12), mana: 100, name: 'Anna' },
+            hero: { life: 100, attack: getRandomAttack(12), mana: 100, name: 'Anna', potionCount: 3, potionHeal: getRandomHeal(20) },
             heroSprite: 'Assets/Duelista-1-MovingSprite.gif',
             originalHeroSprite: 'Assets/Duelista-1-MovingSprite.gif',
             attackHeroGif: 'Assets/Gif-Duelista-1.gif',
@@ -14,7 +14,8 @@ createApp({
             originalVillainSprite: 'Assets/SpearGoblin-sprite.png',
             attackVillainGif: 'Assets/Gif-SpearGoblin.gif',
 
-            isMusicPlaying: false
+            isMusicPlaying: false,
+            isHero: true
         }
 
         function getRandomAttack(baseAttack) {
@@ -22,6 +23,13 @@ createApp({
             const maxModifier = 1.3;
             const randomModifier = Math.random() * (maxModifier - minModifier) + minModifier;
             return Math.round(baseAttack * randomModifier);
+        }
+
+        function getRandomHeal(baseHeal) {
+            const minModifier = 0.8;
+            const maxModifier = 1.2;
+            const randomModifier = Math.random() * (maxModifier - minModifier) + minModifier;
+            return Math.round(baseHeal * randomModifier);
         }
     },
 
@@ -42,36 +50,77 @@ createApp({
     },
 
     methods: {
-        attack(isHero) {
-            const damage = this.hero.attack;
-            this.villain.life = Math.max(this.villain.life - damage, 0);
+        attack() {
 
-            this.heroSprite = this.attackHeroGif;
+            if (this.isHero === true) {
+                const damage = this.hero.attack
+                this.villain.life = Math.max(this.villain.life - damage, 0);
 
-            setTimeout(() => {
-                this.heroSprite = this.originalHeroSprite;  
-            }, 2400);
-            // this.villainAction();
-        },
-        defense(isHero) {
-            this.hero.life -= this.hero.attack - this.villain.attack;
-            // this.villainAction();
-        },
-        usePotion(isHero) {
-            if(this.hero.life === 100){
-                'You are already at full health!'
-            } else if(this.hero.life >= 80){
-                this.hero.life = 100;
-            } else if(this.hero.life < 80){
-                this.hero.life += 20;
-            } else if (this.hero.life + 20 > 100) {
-                this.hero.life = 100;
+                this.villain.life = Math.max(this.villain.life - damage, 0);
+    
+                this.heroSprite = this.attackHeroGif;
+    
+                setTimeout(() => {
+                    this.heroSprite = this.originalHeroSprite;  
+                }, 2400);
+                this.isHero = false;
+                this.hero.mana = Math.min(this.hero.mana + 10, 100);
+
+                if (this.villain.life === 0) {
+                    this.isVictory = true;
+                } else {
+                    this.villainAction();
+                }
+            } else {
+                const damage = this.villain.attack;
+                this.hero.life = Math.max(this.hero.life - damage, 0);
+    
+                this.villainSprite = this.attackVillainGif;
+    
+                setTimeout(() => {
+                    this.villainSprite = this.originalVillainSprite;
+                }, 2400);
+                this.isHero = true;
             }
-            // this.villainAction();
         },
-        special(isHero) {
-            if (this.hero.mana >= 40) {
+        defense() {
+            if (this.isHero === true) {
+                this.hero.life -= (this.villain.attack - this.hero.attack);
+                this.isHero = false;
+                this.hero.mana = Math.min(this.hero.mana + 10, 100);
+                this.villainAction();
+            } else if (this.isHero === false) {
+                this.villain.life -= (this.hero.attack - this.villain.attack);
+                this.isHero = true;
+            }
+
+        },
+        usePotion() {
+            if(this.hero.potionCount > 0){
+                if(this.hero.life === 100){
+                    'You are already at full health!'
+                } else if(this.hero.life >= 84){
+                    this.hero.life = 100;
+                    this.hero.potionCount--;
+                    this.hero.mana = Math.min(this.hero.mana + 10, 100);
+                    // this.villainAction();
+                } else if(this.hero.life < 84){
+                    this.hero.life = Math.min(this.hero.life + this.hero.potionHeal, 100);
+                    this.hero.potionCount--;
+                    this.hero.mana = Math.min(this.hero.mana + 10, 100);
+                    // this.villainAction();
+                } else if (this.hero.life + this.hero.potionHeal > 100) {
+                    this.hero.life = 100;
+                    this.hero.mana = Math.min(this.hero.mana + 10, 100);
+                    // this.villainAction();
+                }
+            }
+        },
+        special() {
+            if (this.isHero === true && this.hero.mana >= 40) {
                 const damage = (this.hero.attack * 2)
+                console.log(damage);
+                
                 this.villain.life = Math.max(this.villain.life - damage, 0);
                 this.hero.mana = Math.max(this.hero.mana - 40, 0);
 
@@ -80,15 +129,21 @@ createApp({
                 setTimeout(() => {
                     this.heroSprite = this.originalHeroSprite;
                 }, 4000);
-                // this.villainAction();
-            }
+                this.isHero = false;
+                this.villainAction();
+            } 
+            // else if (this.isHero === false) {
+            //     const damage = (this.villain.attack * 2)
+            //     this.hero.life = Math.max(this.hero.life - damage, 0);
+            //     this.villainAction();
+            // }
         },
         flee(isHero) {
-
+            alert('You have fled the battle!');
         },
 
         villainAction() {
-            const action = ['attack', 'defense', 'usePotion', 'flee'];
+            const action = ['attack'];
             const randomAction = action[Math.floor(Math.random() * action.length)];
             this[randomAction](false);
         },
@@ -107,6 +162,15 @@ createApp({
                 this.isMusicPlaying = false;
             }
         },
+
+        restartBattle() {
+            this.hero.life = 100;
+            this.hero.mana = 100;
+            this.villain.life = 100;
+            this.hero.potionCount = 3;
+            this.isVictory = false;
+            this.isHero = true;
+        }
     }
 
 
