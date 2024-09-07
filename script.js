@@ -15,7 +15,8 @@ createApp({
             attackVillainGif: 'Assets/Gif-SpearGoblin.gif',
 
             isMusicPlaying: false,
-            isHero: true
+            isHero: true,
+            isActionAllowed: true,
         }
 
         function getRandomAttack(baseAttack) {
@@ -52,26 +53,30 @@ createApp({
     methods: {
         attack() {
 
-            if (this.isHero === true) {
-                const damage = this.hero.attack
-                this.villain.life = Math.max(this.villain.life - damage, 0);
+            if (this.isHero && this.isActionAllowed === true) {
+                this.disableActionsForDuration(2400);
 
+                
+                const damage = this.hero.attack
                 this.villain.life = Math.max(this.villain.life - damage, 0);
     
                 this.heroSprite = this.attackHeroGif;
-    
+                
                 setTimeout(() => {
                     this.heroSprite = this.originalHeroSprite;  
+                    
+                    this.isHero = false;
+                    this.hero.mana = Math.min(this.hero.mana + 10, 100);
+    
+                    if (this.villain.life === 0) {
+                        this.isVictory = true;
+                    } else {
+                        this.villainAction();
+                    }
                 }, 2400);
-                this.isHero = false;
-                this.hero.mana = Math.min(this.hero.mana + 10, 100);
 
-                if (this.villain.life === 0) {
-                    this.isVictory = true;
-                } else {
-                    this.villainAction();
-                }
-            } else {
+            } else if (this.isHero === false && this.isActionAllowed === true) {
+                this.disableActionsForDuration(2500);
                 const damage = this.villain.attack;
                 this.hero.life = Math.max(this.hero.life - damage, 0);
     
@@ -84,7 +89,7 @@ createApp({
             }
         },
         defense() {
-            if (this.isHero === true) {
+            if (this.isHero && this.isActionAllowed === true) {
                 this.hero.life -= (this.villain.attack - this.hero.attack);
                 this.isHero = false;
                 this.hero.mana = Math.min(this.hero.mana + 10, 100);
@@ -117,7 +122,8 @@ createApp({
             }
         },
         special() {
-            if (this.isHero === true && this.hero.mana >= 40) {
+            if (this.isHero && this.isActionAllowed === true && this.hero.mana >= 40) {
+                this.disableActionsForDuration(4000);
                 const damage = (this.hero.attack * 2)
                 console.log(damage);
                 
@@ -128,6 +134,8 @@ createApp({
 
                 setTimeout(() => {
                     this.heroSprite = this.originalHeroSprite;
+
+
                 }, 4000);
                 this.isHero = false;
                 
@@ -145,7 +153,9 @@ createApp({
         villainAction() {
             const action = ['attack'];
             const randomAction = action[Math.floor(Math.random() * action.length)];
+
             this[randomAction](false);
+
         },
 
         playMusic() {
@@ -170,7 +180,15 @@ createApp({
             this.hero.potionCount = 3;
             this.isVictory = false;
             this.isHero = true;
-        }
+            this.isActionAllowed = true;
+        },
+
+        disableActionsForDuration(duration) {
+            this.isActionAllowed = false;
+            setTimeout(() => {
+                this.isActionAllowed = true;
+            }, duration);
+        },
     }
 
 
