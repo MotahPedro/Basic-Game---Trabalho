@@ -9,7 +9,7 @@ createApp({
             attackHeroGif: 'Assets/Gif-Duelista-1.gif',
             specialHeroGif: 'Assets/Gif-Duelista-1.gif',
 
-            villain: { life: 100, attack: getRandomAttack(10), name: 'Goblin' },
+            villain: { life: 50, attack: getRandomAttack(10), name: 'Goblin' },
             villainSprite: 'Assets/SpearGoblin-sprite.png',
             originalVillainSprite: 'Assets/SpearGoblin-sprite.png',
             attackVillainGif: 'Assets/Gif-SpearGoblin.gif',
@@ -52,13 +52,10 @@ createApp({
 
     methods: {
         attack() {
-
             if (this.isHero && this.isActionAllowed === true) {
                 this.disableActionsForDuration(2400);
 
-                
                 const damage = this.hero.attack
-                this.villain.life = Math.max(this.villain.life - damage, 0);
     
                 this.heroSprite = this.attackHeroGif;
                 
@@ -67,6 +64,7 @@ createApp({
                     
                     this.isHero = false;
                     this.hero.mana = Math.min(this.hero.mana + 10, 100);
+                    this.villain.life = Math.max(this.villain.life - damage, 0);
     
                     if (this.villain.life === 0) {
                         this.isVictory = true;
@@ -74,16 +72,17 @@ createApp({
                         this.villainAction();
                     }
                 }, 2400);
-
-            } else if (this.isHero === false && this.isActionAllowed === true) {
+            } 
+            else if (this.isHero === false && this.isActionAllowed === true) {
                 this.disableActionsForDuration(2500);
                 const damage = this.villain.attack;
-                this.hero.life = Math.max(this.hero.life - damage, 0);
-    
+                
                 this.villainSprite = this.attackVillainGif;
     
                 setTimeout(() => {
                     this.villainSprite = this.originalVillainSprite;
+
+                    this.hero.life = Math.max(this.hero.life - damage, 0);
                 }, 2400);
                 this.isHero = true;
             }
@@ -123,27 +122,24 @@ createApp({
         },
         special() {
             if (this.isHero && this.isActionAllowed === true && this.hero.mana >= 40) {
-                this.disableActionsForDuration(4000);
-                const damage = (this.hero.attack * 2)
-                console.log(damage);
+                this.disableActionsForDuration(3500);
+                const damage = (this.hero.attack * 2)                
                 
-                this.villain.life = Math.max(this.villain.life - damage, 0);
-                this.hero.mana = Math.max(this.hero.mana - 40, 0);
-
                 this.heroSprite = this.specialHeroGif;
-
+                
                 setTimeout(() => {
                     this.heroSprite = this.originalHeroSprite;
+                    
+                    this.isHero = false;
+                    this.hero.mana = Math.max(this.hero.mana - 40, 0);
+                    this.villain.life = Math.max(this.villain.life - damage, 0);
 
-
-                }, 4000);
-                this.isHero = false;
-                
-                if (this.villain.life === 0) {
-                    this.isVictory = true;
-                } else {
-                    this.villainAction();
-                }
+                    if (this.villain.life === 0) {
+                        this.isVictory = true;
+                    } else {
+                        this.villainAction();
+                    }
+                }, 3500);
             } 
         },
         flee(isHero) {
@@ -155,7 +151,6 @@ createApp({
             const randomAction = action[Math.floor(Math.random() * action.length)];
 
             this[randomAction](false);
-
         },
 
         playMusic() {
