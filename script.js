@@ -9,14 +9,15 @@ createApp({
             attackHeroGif: 'Assets/Gif-Duelista-1.gif',
             specialHeroGif: 'Assets/Gif-Duelista-1.gif',
 
-            villain: { life: 50, attack: getRandomAttack(10), name: 'Goblin' },
-            villainSprite: 'Assets/SpearGoblin-sprite.png',
-            originalVillainSprite: 'Assets/SpearGoblin-sprite.png',
-            attackVillainGif: 'Assets/Gif-SpearGoblin.gif',
+            villain: { life: 175, attack: getRandomAttack(17), name: 'Demon' },
+            villainSprite: 'Assets/Demon-Idle.gif',
+            originalVillainSprite: 'Assets/Demon-Idle.gif',
+            attackVillainGif: 'Assets/Demon-Attack.gif',
 
             isMusicPlaying: false,
             isHero: true,
             isActionAllowed: true,
+            isVictory: false,
         }
 
         function getRandomAttack(baseAttack) {
@@ -46,7 +47,7 @@ createApp({
             return Math.max((this.hero.mana / 100) * 100, 0);
         },
         villainLifePercentage() {
-            return Math.max((this.villain.life / 100) * 100, 0);
+            return Math.max((this.villain.life / 175) * 100, 0);
         }
     },
 
@@ -123,7 +124,7 @@ createApp({
         special() {
             if (this.isHero && this.isActionAllowed === true && this.hero.mana >= 40) {
                 this.disableActionsForDuration(3500);
-                const damage = (this.hero.attack * 2)                
+                const damage = (this.hero.attack * 2.5)                
                 
                 this.heroSprite = this.specialHeroGif;
                 
@@ -171,7 +172,7 @@ createApp({
         restartBattle() {
             this.hero.life = 100;
             this.hero.mana = 100;
-            this.villain.life = 100;
+            this.villain.life = 175;
             this.hero.potionCount = 3;
             this.isVictory = false;
             this.isHero = true;
@@ -184,6 +185,7 @@ createApp({
                 this.isActionAllowed = true;
             }, duration);
         },
+        
     }
 
 
