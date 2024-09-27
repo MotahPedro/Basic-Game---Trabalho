@@ -11,39 +11,36 @@
 
     <div id="app">
         <h1>Hora do Duelo</h1>
-        <div class="character">
-
-            <div class="life-bar">
-                <div class="life" :style="{width: heroLifePercentage + '%'}">{{hero.life}}</div>
+        <div class="characters-container">
+            <div class="character">
+                <div class="life-bar">
+                    <div class="life" :style="{width: heroLifePercentage + '%'}">{{hero.life}}</div>
+                </div>
+                <div class="mana-bar">
+                    <div class="mana" :style="{width: heroManaPercentage + '%'}">{{hero.mana}}</div>
+                </div>
+                <div class="potions">
+                    <img v-for="index in 3" :key="index" :src="getPotionImage(index)" class="potion" alt="Potion">
+                </div>
+                <div class="sprite">
+                    <img :src="heroSprite" id="heroSprite" alt="Sprite do Heroi">
+                </div>
+                <h1> Duelist - Anna </h1>
+                <button @click="attack()">Atacar</button>
+                <button @click="defense()">Defender</button>
+                <button @click="usePotion()">Usar Poção</button>
+                <button @click="special()">Especial</button>
             </div>
 
-            <div class="mana-bar">
-                <div class="mana" :style="{width: heroManaPercentage + '%'}">{{hero.mana}}</div>
+            <div class="character">
+                <div class="life-bar">
+                    <div class="life" :style="{width: villainLifePercentage + '%'}">{{villain.life}}</div>
+                </div>
+                <div class="sprite">
+                    <img :src="villainSprite" id="villainSprite" alt="Sprite do inimigo">
+                </div>
+                <h1>Demon</h1>
             </div>
-
-            <div class="sprite">
-                <img :src="heroSprite" id="heroSprite" alt="Sprite do Heroi">
-            </div>
-            <h1> Duelist - Anna </h1>
-            <button @click="attack()">Atacar</button>
-            <button @click="defend()">Defender</button>
-            <button @click="usePotion()">Usar Poção</button>
-            <button @click="flee()">Correr</button>
-            <button @click="special()">Especial</button>
-
-        </div>
-
-        <div class="character">
-
-            <div class="life-bar">
-                <div class="life" :style="{width: villainLifePercentage + '%'}">{{villain.life}}</div>
-            </div>
-
-            <div class="sprite">
-                <img :src="villainSprite" id="villainSprite" alt="Sprite do inimigo">
-            </div>
-            <h1>Demon</h1>
-
         </div>
 
         <div class="musica">
@@ -55,8 +52,10 @@
             <h1>Vitória!</h1>
             <button @click="restartBattle">Reiniciar Combate</button>
         </div>
-
-
+        <div v-if="isDefeat" class="defeat-modal">
+            <h1>Derrota!</h1>
+            <button @click="restartBattle">Reiniciar Combate</button>
+        </div>
     </div>
     
 </body>
